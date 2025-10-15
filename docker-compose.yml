@@ -1,0 +1,45 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    environment:
+      PYTHONPATH: /app
+      DJANGO_SETTINGS_MODULE: newsdeck.settings
+    volumes:
+      - .:/app
+    command: python newsdeck/manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    environment:
+      PYTHONPATH: /app
+      DJANGO_SETTINGS_MODULE: newsdeck.settings
+    volumes:
+      - .:/app
+    command: celery -A newsdeck.celery_app worker -l info
+    depends_on:
+      - redis
+
+  beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    environment:
+      PYTHONPATH: /app
+      DJANGO_SETTINGS_MODULE: newsdeck.settings
+    volumes:
+      - .:/app
+    command: celery -A newsdeck.celery_app beat -l info
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
