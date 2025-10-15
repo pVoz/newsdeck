@@ -1,6 +1,6 @@
 # NewsDeck (Django + Celery)
 
-Jednoduchý projekt na sťahovanie RSS článkov a tvorbu **digestov**.
+Projekt na sťahovanie RSS článkov a tvorbu **digestov**.
 - **Django**: modely `NewsSource`, `Article`, `Digest` + admin
 - **Celery**: úloha `fetch_rss_feeds` + periodické spúšťanie (beat)
 - **Redis**: broker + výsledky
